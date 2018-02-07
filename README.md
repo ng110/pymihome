@@ -1,1 +1,3 @@
 # pymihome
+
+Work in progress.  Tune in later.  Or offer to help...

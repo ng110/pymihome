@@ -30,11 +30,11 @@ class Connection():
         self._subdevices = _data[0]["subdevices"]
         for dev in self._subdevices:
             dtype = dev["device_type"]
-            if dtype == 'control' dtype == 'legacy' or dtype == 'socket':
+            if dtype == 'control' or dtype == 'legacy' or dtype == 'socket':
                 dev['is_switch'] = True
             else:
                 dev['is_switch'] = False
-            if dtype == 'control' dtype == 'house':
+            if dtype == 'control' or dtype == 'house':
                 dev['is_sensor'] = True
             else:
                 dev['is_sensor'] = False
