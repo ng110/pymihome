@@ -51,7 +51,7 @@ class Connection():
                                      headers=HEADER_T)
         else:
             response = requests.post(method, auth=self._auth)
-        print(getsizeof(response))
+#        print(getsizeof(response))
         response_d = response.json()
 #        print(response_d)
         if response_d['status'] != 'success':
@@ -86,29 +86,28 @@ class EnergenieSensor():
 
     @property
     def power(self):
-        data = self._mihome.post(DEVICEINFO, self._id)
-        return data['real_power']
-#        return data['last_data_instant]
+        return self._data['real_power']
+#        return self._data['last_data_instant]
 
     @property
     def realpower(self):
-        data = self._mihome.post(DEVICEINFO, self._id)
-        return data['real_power']
+        return self._data['real_power']
 
     @property
     def lastpower(self):
-        data = self._mihome.post(DEVICEINFO, self._id)
-        return data['last_data_instant']
+        return self._data['last_data_instant']
 
     @property
     def todays_usage(self):
-        data = self._mihome.post(DEVICEINFO, self._id)
-        return data['today_wh']
+        return self._data['today_wh']
 
     @property
     def voltage(self):
-        data = self._mihome.post(DEVICEINFO, self._id)
-        return data['voltage']
+        return self._data['voltage']
+
+    def getinfo(self):
+        self._data = self._mihome.post(DEVICEINFO, self._id)
+        return bool(self._data)
 
 
 
@@ -147,28 +146,32 @@ class EnergenieSwitch():
 
     @property
     def state(self):
-        if self.is_monitor:
-            data = self._mihome.post(DEVICEINFO, self._id)
-            return data['power_state']
+        return self._data['power_state']
 
     @property
     def power(self):
-        if self.is_sensor:
-            data = self._mihome.post(DEVICEINFO, self._id)
-            return data['real_power']
-#            return data['last_data_instant]
+        return self._data['real_power']
+#        return self._data['last_data_instant]
+
+    @property
+    def realpower(self):
+        return self._data['real_power']
+
+    @property
+    def lastpower(self):
+        return self._data['last_data_instant']
 
     @property
     def todays_usage(self):
-        if self.is_sensor:
-            data = self._mihome.post(DEVICEINFO, self._id)
-            return data['today_wh']
+        return self._data['today_wh']
 
     @property
     def voltage(self):
-        if self.is_sensor:
-            data = self._mihome.post(DEVICEINFO, self._id)
-            return data['voltage']
+        return self._data['voltage']
+
+    def getinfo(self):
+        self._data = self._mihome.post(DEVICEINFO, self._id)
+        return bool(self._data)
 
 
 if __name__ == '__main__':
