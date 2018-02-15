@@ -53,8 +53,9 @@ class Connection():
                                      headers=HEADER_T)
         else:
             response = requests.post(method, auth=self._auth)
-        print(getsizeof(response))
+#        print(getsizeof(response))
         response_d = response.json()
+#        print(response_d)
         if response_d['status'] != 'success':
             self._success = False
             return False
@@ -72,6 +73,7 @@ class Connection():
 
 class EnergenieSensor():
     def __init__(self, mihome, subdevice):
+        self._mihome = mihome
         self._name = subdevice["label"]
         self._type = subdevice["device_type"]  # control, legacy, socket, ecalm, etrv, house
         self._is_sensor = subdevice["is_sensor"]
@@ -86,23 +88,33 @@ class EnergenieSensor():
 
     @property
     def power(self):
-        data = self.mihome.post(DEVICEINFO, self._id)
-        return bool(data['real_power'])
-#        return bool(data['last_data_instant])
+        return self._data['real_power']
+#        return self._data['last_data_instant]
+
+    @property
+    def realpower(self):
+        return self._data['real_power']
+
+    @property
+    def lastpower(self):
+        return self._data['last_data_instant']
 
     @property
     def todays_usage(self):
-        data = self.mihome.post(DEVICEINFO, self._id)
-        return bool(data['today_wh'])
+        return self._data['today_wh']
 
     @property
     def voltage(self):
-        data = self.mihome.post(DEVICEINFO, self._id)
-        return bool(data['voltage'])
+        return self._data['voltage']
+
+    def getinfo(self):
+        self._data = self._mihome.post(DEVICEINFO, self._id)
+        return bool(self._data)
 
 
 class EnergenieSwitch():
     def __init__(self, mihome, subdevice):
+        self._mihome = mihome
         self._name = subdevice["label"]
         self._type = subdevice["device_type"]  # control, legacy, socket, ecalm, etrv, house
         self._is_switch = subdevice["is_switch"]
@@ -116,10 +128,10 @@ class EnergenieSwitch():
         return self._name
 
     def turn_on(self):
-        return bool(self.mihome.post(POWERON, self._id))
+        return bool(self._mihome.post(POWERON, self._id))
 
     def turn_off(self):
-        return bool(self.mihome.post(POWEROFF, self._id))
+        return bool(self._mihome.post(POWEROFF, self._id))
 
     @property
     def is_monitor(self):
@@ -135,28 +147,32 @@ class EnergenieSwitch():
 
     @property
     def state(self):
-        if self.is_monitor:
-            data = self.mihome.post(DEVICEINFO, self._id)
-            return bool(data['power_state'])
+        return self._data['power_state']
 
     @property
     def power(self):
-        if self.is_sensor:
-            data = self.mihome.post(DEVICEINFO, self._id)
-            return bool(data['real_power'])
-#            return bool(data['last_data_instant])
+        return self._data['real_power']
+#        return self._data['last_data_instant]
+
+    @property
+    def realpower(self):
+        return self._data['real_power']
+
+    @property
+    def lastpower(self):
+        return self._data['last_data_instant']
 
     @property
     def todays_usage(self):
-        if self.is_sensor:
-            data = self.mihome.post(DEVICEINFO, self._id)
-            return bool(data['today_wh'])
+        return self._data['today_wh']
 
     @property
     def voltage(self):
-        if self.is_sensor:
-            data = self.mihome.post(DEVICEINFO, self._id)
-            return bool(data['voltage'])
+        return self._data['voltage']
+
+    def getinfo(self):
+        self._data = self._mihome.post(DEVICEINFO, self._id)
+        return bool(self._data)
 
 
 if __name__ == '__main__':
