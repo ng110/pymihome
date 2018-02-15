@@ -10,7 +10,7 @@ from requests.auth import HTTPBasicAuth
 import json
 from sys import getsizeof
 
-HEADER_T = {'content-type':'application/json'}
+HEADER_T = {'content-type': 'application/json'}
 BASEURL = "https://mihome4u.co.uk/api/v1/"
 LISTSUBDEVICES = BASEURL + "device_groups/list"
 FETCHUSAGEDATA = BASEURL + "subdevices/get_data"
@@ -18,8 +18,10 @@ DEVICEINFO = BASEURL + "subdevices/show"
 POWERON = BASEURL + "subdevices/power_on"
 POWEROFF = BASEURL + "subdevices/power_off"
 
+
 class EnergenieTypeError(Exception):
     pass
+
 
 class Connection():
 
@@ -47,7 +49,7 @@ class Connection():
     def post(self, method, id=None):
         if id:
             response = requests.post(method, auth=self._auth,
-                                     data=json.dumps({"id":id}),
+                                     data=json.dumps({"id": id}),
                                      headers=HEADER_T)
         else:
             response = requests.post(method, auth=self._auth)
@@ -97,7 +99,6 @@ class EnergenieSensor():
     def voltage(self):
         data = self.mihome.post(DEVICEINFO, self._id)
         return bool(data['voltage'])
-
 
 
 class EnergenieSwitch():
