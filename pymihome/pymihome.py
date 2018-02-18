@@ -1,14 +1,14 @@
 """
 pymihome
 
-Neil Griffin 
+Neil Griffin
 31st January 2018
 
 """
 import requests
 from requests.auth import HTTPBasicAuth
 import json
-from sys import getsizeof
+
 
 HEADER_T = {'content-type': 'application/json'}
 BASEURL = "https://mihome4u.co.uk/api/v1/"
@@ -155,7 +155,7 @@ class EnergenieSwitch():
 
     @property
     def state(self):
-        if self.is_sensor
+        if self.is_sensor:
             return self._data['power_state']
         else:
             raise EnergenieTypeError
