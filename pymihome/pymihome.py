@@ -83,6 +83,10 @@ class EnergenieSensor():
             raise EnergenieTypeError("Type '{}' is not a known sensor".format(self._type))
 
     @property
+    def id(self):
+        return self._id
+
+    @property
     def name(self):
         return self._name
 
@@ -124,6 +128,10 @@ class EnergenieSwitch():
             raise EnergenieTypeError("Type '{}' is not a known switch".format(self._type))
 
     @property
+    def id(self):
+        return self._id
+
+    @property
     def name(self):
         return self._name
 
@@ -147,7 +155,10 @@ class EnergenieSwitch():
 
     @property
     def state(self):
-        return self._data['power_state']
+        if self.is_sensor
+            return self._data['power_state']
+        else:
+            raise EnergenieTypeError
 
     @property
     def power(self):
