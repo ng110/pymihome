@@ -71,16 +71,21 @@ class Connection():
         return self._subdevices
 
 
-class EnergenieSensor():
+# Abstract base class
+class EnergenieDevice():
     def __init__(self, mihome, subdevice):
         self._mihome = mihome
         self._name = subdevice["label"]
         self._type = subdevice["device_type"]  # control, legacy, socket, ecalm, etrv, house
-        self._is_sensor = subdevice["is_sensor"]
+        self._is_switch = subdevice["is_switch"]
+        if self._type == 'control' or self._type == 'house':
+            self._is_sensor = True
+        else:
+            self._is_sensor = False
         self._id = subdevice["id"]
         self._devid = subdevice["device_id"]
-        if not self._is_sensor:
-            raise EnergenieTypeError("Type '{}' is not a known sensor".format(self._type))
+        self.typecheck()
+        self.getinfo()
 
     @property
     def id(self):
@@ -89,6 +94,17 @@ class EnergenieSensor():
     @property
     def name(self):
         return self._name
+
+    def getinfo(self):
+        self._data = self._mihome.post(DEVICEINFO, self._id)
+        return bool(self._data)
+
+
+class EnergenieSensor(EnergenieDevice):
+
+    def typecheck(self):
+        if not self._is_sensor:
+            raise EnergenieTypeError("Type '{}' is not a known sensor".format(self._type))
 
     @property
     def power(self):
@@ -116,24 +132,11 @@ class EnergenieSensor():
         return bool(self._data)
 
 
-class EnergenieSwitch():
-    def __init__(self, mihome, subdevice):
-        self._mihome = mihome
-        self._name = subdevice["label"]
-        self._type = subdevice["device_type"]  # control, legacy, socket, ecalm, etrv, house
-        self._is_switch = subdevice["is_switch"]
-        self._id = subdevice["id"]
-        self._devid = subdevice["device_id"]
+class EnergenieSwitch(EnergenieDevice):
+
+    def typecheck(self):
         if not self._is_switch:
             raise EnergenieTypeError("Type '{}' is not a known switch".format(self._type))
-
-    @property
-    def id(self):
-        return self._id
-
-    @property
-    def name(self):
-        return self._name
 
     def turn_on(self):
         return bool(self._mihome.post(POWERON, self._id))
@@ -141,17 +144,17 @@ class EnergenieSwitch():
     def turn_off(self):
         return bool(self._mihome.post(POWEROFF, self._id))
 
-    @property
-    def is_monitor(self):
-        if self._type == 'control':
-            return True
-        return False
+    # @property
+    # def is_monitor(self):
+    #     if self._type == 'control':
+    #         return True
+    #     return False
 
-    @property
-    def is_sensor(self):
-        if self._type == 'control' or self._type == 'house':
-            return True
-        return False
+    # @property
+    # def is_sensor(self):
+    #     if self._type == 'control' or self._type == 'house':
+    #         return True
+    #     return False
 
     @property
     def state(self):
@@ -162,28 +165,39 @@ class EnergenieSwitch():
 
     @property
     def power(self):
-        return self._data['real_power']
+        if self.is_sensor:
+            return self._data['real_power']
+        else:
+            return None
 #        return self._data['last_data_instant]
 
     @property
     def realpower(self):
-        return self._data['real_power']
+        if self.is_sensor:
+            return self._data['real_power']
+        else:
+            return None
 
     @property
     def lastpower(self):
-        return self._data['last_data_instant']
+        if self.is_sensor:
+            return self._data['last_data_instant']
+        else:
+            return None
 
     @property
     def todays_usage(self):
-        return self._data['today_wh']
+        if self.is_sensor:
+            return self._data['today_wh']
+        else:
+            return None
 
     @property
     def voltage(self):
-        return self._data['voltage']
-
-    def getinfo(self):
-        self._data = self._mihome.post(DEVICEINFO, self._id)
-        return bool(self._data)
+        if self.is_sensor:
+            return self._data['voltage']
+        else:
+            return None
 
 
 if __name__ == '__main__':
