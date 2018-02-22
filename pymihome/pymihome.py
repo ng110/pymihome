@@ -158,14 +158,14 @@ class EnergenieSwitch(EnergenieDevice):
 
     @property
     def state(self):
-        if self.is_sensor:
+        if self._is_sensor:
             return self._data['power_state']
         else:
             raise EnergenieTypeError
 
     @property
     def power(self):
-        if self.is_sensor:
+        if self._is_sensor:
             return self._data['real_power']
         else:
             return None
@@ -173,28 +173,28 @@ class EnergenieSwitch(EnergenieDevice):
 
     @property
     def realpower(self):
-        if self.is_sensor:
+        if self._is_sensor:
             return self._data['real_power']
         else:
             return None
 
     @property
     def lastpower(self):
-        if self.is_sensor:
+        if self._is_sensor:
             return self._data['last_data_instant']
         else:
             return None
 
     @property
     def todays_usage(self):
-        if self.is_sensor:
+        if self._is_sensor:
             return self._data['today_wh']
         else:
             return None
 
     @property
     def voltage(self):
-        if self.is_sensor:
+        if self._is_sensor:
             return self._data['voltage']
         else:
             return None
