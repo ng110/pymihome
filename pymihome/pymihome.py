@@ -95,6 +95,14 @@ class EnergenieDevice():
     def name(self):
         return self._name
 
+    @property
+    def is_sensor(self):
+        return self._is_sensor
+
+    @property
+    def is_switch(self):
+        return self._is_switch
+
     def getinfo(self):
         self._data = self._mihome.post(DEVICEINFO, self._id)
         return bool(self._data)
