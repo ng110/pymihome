@@ -1,3 +1,3 @@
 from .pymihome import Connection
-from .pymihome import EnergenieSwitch, EnergenieSensor
+from .pymihome import EnergenieSwitch, EnergenieSensor, EnergenieBinary
 from .pymihome import EnergenieTypeError

@@ -40,6 +40,10 @@ class Connection():
                 dev['is_sensor'] = True
             else:
                 dev['is_sensor'] = False
+            if dtype == 'open':
+                dev['is_binary'] = True
+            else:
+                dev['is_binary'] = False
 #        self.devicelookup = {}
 #        for i, subdevice in enumerate(self.subdevices):
 #            print(i, self.subdevices[i]["id"], self.subdevices[i]["label"], 'type:',
@@ -82,6 +86,10 @@ class EnergenieDevice():
             self._is_sensor = True
         else:
             self._is_sensor = False
+        if self._type == 'open':
+            self._is_binary = True
+        else:
+            self._is_binary = False
         self._id = subdevice["id"]
         self._devid = subdevice["device_id"]
         self.typecheck()
@@ -100,12 +108,32 @@ class EnergenieDevice():
         return self._is_sensor
 
     @property
+    def is_binary(self):
+        return self._is_binary
+
+    @property
     def is_switch(self):
         return self._is_switch
 
     def getinfo(self):
         self._data = self._mihome.post(DEVICEINFO, self._id)
         return bool(self._data)
+
+
+class EnergenieBinary(EnergenieDevice):
+
+    def typecheck(self):
+        if not self._is_binary:
+            raise EnergenieTypeError("Type '{}' is not a known binary sensor".format(self._type))
+
+    @property
+    def open(self):
+        self.getinfo()
+        return self._data['sensor_state'] == 1.0
+
+    @property
+    def closed(self):
+        return not self.open
 
 
 class EnergenieSensor(EnergenieDevice):
@@ -135,9 +163,6 @@ class EnergenieSensor(EnergenieDevice):
     def voltage(self):
         return self._data['voltage']
 
-    def getinfo(self):
-        self._data = self._mihome.post(DEVICEINFO, self._id)
-        return bool(self._data)
 
 
 class EnergenieSwitch(EnergenieDevice):
