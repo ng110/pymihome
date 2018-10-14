@@ -47,6 +47,9 @@ docs/_build
 # Cookiecutter
 output/
 
+# Distributions
+dist/
+
 # pyenv
 .python-version
 

@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 from codecs import open
 from os import path
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 
 here = path.abspath(path.dirname(__file__))
 
@@ -23,7 +23,7 @@ setup(
     description='Library to access Energenie MiHome devices via the web API.',
     long_description=long_description,
     author='Neil Griffin',
-    author_email='ngriffin110@gmail.com'
+    author_email='ngriffin110@gmail.com',
     url='https://github.com/ng110/pymihome',
     download_url='https://github.com/ng110/pymihome/tarball/' + __version__,
 ###    license='BSD',  MIT??
@@ -32,11 +32,11 @@ setup(
       "Topic :: Utilities",
       'Intended Audience :: Developers',
       'Programming Language :: Python :: 3',
-      "Operating System :: OS Independent"],
+      "Operating System :: OS Independent"
     ],
     keywords='energenie mihome',
     packages=find_packages(exclude=['docs', 'tests*']),
     include_package_data=True,
     install_requires=install_requires,
-    dependency_links=dependency_links,
+    dependency_links=dependency_links
 )

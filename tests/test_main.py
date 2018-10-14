@@ -19,10 +19,10 @@ def test_sensors(mihome):
     assert len(sensors) == 3, 'number of sensors'
 
 def test_switch(mihome):
-    sensors = [EnergenieSwitch(mihome, dev) for dev in mihome.subdevices if dev['is_switch']]
-    assert len(sensors) == 7
+    switches = [EnergenieSwitch(mihome, dev) for dev in mihome.subdevices if dev['is_switch']]
+    assert len(switches) == 7
 
 def test_sensors(mihome):
-    sensors = [EnergenieBinary(mihome, dev) for dev in mihome.subdevices if dev['is_binary']]
-    assert len(sensors) == 1
+    binaries = [EnergenieBinary(mihome, dev) for dev in mihome.subdevices if dev['is_binary']]
+    assert len(binaries) == 1
 

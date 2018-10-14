@@ -1,13 +1,16 @@
 pymihome
 ===============================
 
-version number: 0.0.1
+version number: 0.0.2
 author: Neil Griffin
 
 Overview
 --------
 
-Short descrition for project
+Library to access Energenie MiHome devices via the web API.
+
+Work in progress.  Currently has some functionality, but limited and not
+properly tested.  Use with care.
 
 Installation / Usage
 --------------------
@@ -25,9 +28,20 @@ Or clone the repo:
 Contributing
 ------------
 
-TBD
+Offers welcome, as I don't have much time to work on this!
+
+License
+-------
+
+Not decided yet.
 
 Example
 -------
 
-TBD
+    $ from pymihome import Connection, EnergenieSwitch
+
+    $ mihome = Connection([username], [key|password])
+    $ switches = [EnergenieSwitch(mihome, dev) for dev in mihome.subdevices if dev['is_switch']]
+    $ for switch in switches:
+    $     print(switch.name)
+
