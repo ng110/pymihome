@@ -1,38 +1,42 @@
-from setuptools import setup
-import os
+from setuptools import setup, find_packages
+from codecs import open
+from os import path
 
-def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+__version__ = '0.0.1'
 
-setup(name='pymihome',
-      version='0.0.1',
-      description='Library to access Energenie MiHome devices via the web API.',
-#      url='',
-      author='Neil Griffin',
-      author_email='ngriffin110@gmail.com',
-      license='tbd',   # MIT, BSD
-      packages=['pymihome'],
-      long_description=read('README.md'),
-#      keywords = ["photos"],
-      classifiers=[
-          "Development Status :: 2 - Pre-Alpha",
-          "Topic :: Utilities",
-          "Programming Language :: Python",
-          "Programming Language :: Python :: 3",
-#          "License :: OSI Approved :: BSD GNU General Public License (GPL)",
-          "Operating System :: OS Independent"],
-      zip_safe=True
-      )
+here = path.abspath(path.dirname(__file__))
 
+# Get the long description from the README file
+with open(path.join(here, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
 
+# get the dependencies and installs
+with open(path.join(here, 'requirements.txt'), encoding='utf-8') as f:
+    all_reqs = f.read().split('\n')
 
+install_requires = [x.strip() for x in all_reqs if 'git+' not in x]
+dependency_links = [x.strip().replace('git+', '') for x in all_reqs if x.startswith('git+')]
 
-
-# https://pypi.python.org/pypi?%3Aaction=list_classifiers
-# # Development Status :: 1 - Planning
-# Development Status :: 2 - Pre-Alpha
-# Development Status :: 3 - Alpha
-# Development Status :: 4 - Beta
-# Development Status :: 5 - Production/Stable
-# Development Status :: 6 - Mature
-# Development Status :: 7 - Inactive
+setup(
+    name='pymihome',
+    version=__version__,
+    description='Library to access Energenie MiHome devices via the web API.',
+    long_description=long_description,
+    author='Neil Griffin',
+    author_email='ngriffin110@gmail.com'
+    url='https://github.com/ng110/pymihome',
+    download_url='https://github.com/ng110/pymihome/tarball/' + __version__,
+###    license='BSD',  MIT??
+    classifiers=[
+      "Development Status :: 2 - Pre-Alpha",
+      "Topic :: Utilities",
+      'Intended Audience :: Developers',
+      'Programming Language :: Python :: 3',
+      "Operating System :: OS Independent"],
+    ],
+    keywords='energenie mihome',
+    packages=find_packages(exclude=['docs', 'tests*']),
+    include_package_data=True,
+    install_requires=install_requires,
+    dependency_links=dependency_links,
+)

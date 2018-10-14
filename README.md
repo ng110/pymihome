@@ -7,9 +7,7 @@ author: Neil Griffin
 Overview
 --------
 
-Library to access Energenie MiHome devices via the web API.
-
-Work in progress.  Tune in later.
+Short descrition for project
 
 Installation / Usage
 --------------------
@@ -27,7 +25,7 @@ Or clone the repo:
 Contributing
 ------------
 
-Get in touch.  Offers greatly received.
+TBD
 
 Example
 -------
