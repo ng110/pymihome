@@ -4,4 +4,3 @@ sphinx_rtd_theme
 pytest
 pypi-publisher
 requests
-json
