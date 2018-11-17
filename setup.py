@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 from codecs import open
 from os import path
 
-__version__ = '0.0.4'
+__version__ = '0.0.5'
 
 here = path.abspath(path.dirname(__file__))
 
@@ -28,13 +28,14 @@ setup(
     author_email='ngriffin110@gmail.com',
     url='https://github.com/ng110/pymihome',
     download_url='https://github.com/ng110/pymihome/tarball/' + __version__,
-###    license='BSD',  MIT??
+    license='LGPLv3'
     classifiers=[
       "Development Status :: 2 - Pre-Alpha",
       "Topic :: Utilities",
       'Intended Audience :: Developers',
       'Programming Language :: Python :: 3',
-      "Operating System :: OS Independent"
+      "Operating System :: OS Independent",
+      "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)"
     ],
     keywords='energenie mihome',
     packages=find_packages(exclude=['docs', 'tests*']),

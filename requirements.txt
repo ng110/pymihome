@@ -1,6 +1,9 @@
-# Dev/Deployment
+# Dev
+pytest
+
+# Docs
 sphinx
 sphinx_rtd_theme
-pytest
-pypi-publisher
+
+# Deployment
 requests
