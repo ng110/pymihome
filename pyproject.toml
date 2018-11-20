@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "pymihome"
+version = "0.0.5"
+description = "Library to access Energenie MiHome devices via the web API."
+authors = ["ng110 <ngriffin110@gmail.com>"]
+license = "LGPLv3"
+
+[tool.poetry.dependencies]
+python = "^3.4"
+requests = "^2.20"
+
+[tool.poetry.dev-dependencies]
+pytest = "^3.9"
+sphinx-docs-theme = "^0.3.2"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
