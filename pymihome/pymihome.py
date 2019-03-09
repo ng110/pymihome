@@ -17,7 +17,9 @@ FETCHUSAGEDATA = BASEURL + "subdevices/get_data"
 DEVICEINFO = BASEURL + "subdevices/show"
 POWERON = BASEURL + "subdevices/power_on"
 POWEROFF = BASEURL + "subdevices/power_off"
-
+SET_TEMP = BASEURL + "subdevices/set_target_temperature"
+MIN_TEMP = 4
+MAX_TEMP = 30
 
 class EnergenieTypeError(Exception):
     pass
@@ -50,10 +52,10 @@ class Connection():
 #                  self.subdevices[i]["device_type"], flush=True)
 #            self.devicelookup[subdevice["label"]] = subdevice
 
-    def post(self, method, id=None):
+    def post(self, method, **kwargs):
         if id:
             response = requests.post(method, auth=self._auth,
-                                     data=json.dumps({"id": id}),
+                                     data=json.dumps(kwargs),
                                      headers=HEADER_T)
         else:
             response = requests.post(method, auth=self._auth)
@@ -94,6 +96,7 @@ class EnergenieDevice():
         self._devid = subdevice["device_id"]
         self.typecheck()
         self.getinfo()
+        self._device = subdevice
 
     @property
     def id(self):
@@ -116,8 +119,33 @@ class EnergenieDevice():
         return self._is_switch
 
     def getinfo(self):
-        self._data = self._mihome.post(DEVICEINFO, self._id)
+        self._data = self._mihome.post(DEVICEINFO, id=self._id)
         return bool(self._data)
+
+class EnergenieTemperature(EnergenieDevice):
+
+
+
+    def typecheck(self):
+        if self._type != 'etrv':
+            raise EnergenieTypeError("Type '{}' is not a known Temperature sensor".format(self._type))
+
+    @property
+    def voltage(self):
+        return self._data['voltage']
+
+    @property
+    def target_temp(self):
+        return self._data['target_temperature']
+
+    @property
+    def latest_temp(self):
+        return self._data['last_temperature']
+
+    def set_temp(self,target_temp):
+        target_temp = min(MAX_TEMP, target_temp)
+        target_temp = max(MIN_TEMP, target_temp)
+        return bool(self._mihome.post(SET_TEMP, id=self._id, temperature=target_temp))
 
 
 class EnergenieBinary(EnergenieDevice):
@@ -164,7 +192,6 @@ class EnergenieSensor(EnergenieDevice):
         return self._data['voltage']
 
 
-
 class EnergenieSwitch(EnergenieDevice):
 
     def typecheck(self):
@@ -172,10 +199,10 @@ class EnergenieSwitch(EnergenieDevice):
             raise EnergenieTypeError("Type '{}' is not a known switch".format(self._type))
 
     def turn_on(self):
-        return bool(self._mihome.post(POWERON, self._id))
+        return bool(self._mihome.post(POWERON, id=self._id))
 
     def turn_off(self):
-        return bool(self._mihome.post(POWEROFF, self._id))
+        return bool(self._mihome.post(POWEROFF, id=self._id))
 
     # @property
     # def is_monitor(self):
