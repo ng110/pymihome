@@ -52,10 +52,10 @@ class Connection():
 #                  self.subdevices[i]["device_type"], flush=True)
 #            self.devicelookup[subdevice["label"]] = subdevice
 
-    def post(self, method, **kwargs):
-        if id:
+    def post(self, method, deviceid=None, **kwargs):
+        if deviceid:
             response = requests.post(method, auth=self._auth,
-                                     data=json.dumps(kwargs),
+                                     data=json.dumps({**kwargs, "id":deviceid}),
                                      headers=HEADER_T)
         else:
             response = requests.post(method, auth=self._auth)
@@ -96,7 +96,7 @@ class EnergenieDevice():
         self._devid = subdevice["device_id"]
         self.typecheck()
         self.getinfo()
-        self._device = subdevice
+        self._subdevice = subdevice
 
     @property
     def id(self):
@@ -119,12 +119,14 @@ class EnergenieDevice():
         return self._is_switch
 
     def getinfo(self):
-        self._data = self._mihome.post(DEVICEINFO, id=self._id)
+        self._data = self._mihome.post(DEVICEINFO, deviceid=self._id)
         return bool(self._data)
 
+    def typecheck(self):
+        raise EnergenieTypeError("Typecheck missing from definition.")
+
+
 class EnergenieTemperature(EnergenieDevice):
-
-
 
     def typecheck(self):
         if self._type != 'etrv':
@@ -142,10 +144,10 @@ class EnergenieTemperature(EnergenieDevice):
     def latest_temp(self):
         return self._data['last_temperature']
 
-    def set_temp(self,target_temp):
+    def set_temp(self, target_temp):
         target_temp = min(MAX_TEMP, target_temp)
         target_temp = max(MIN_TEMP, target_temp)
-        return bool(self._mihome.post(SET_TEMP, id=self._id, temperature=target_temp))
+        return bool(self._mihome.post(SET_TEMP, deviceid=self._id, temperature=target_temp))
 
 
 class EnergenieBinary(EnergenieDevice):
@@ -199,10 +201,10 @@ class EnergenieSwitch(EnergenieDevice):
             raise EnergenieTypeError("Type '{}' is not a known switch".format(self._type))
 
     def turn_on(self):
-        return bool(self._mihome.post(POWERON, id=self._id))
+        return bool(self._mihome.post(POWERON, deviceid=self._id))
 
     def turn_off(self):
-        return bool(self._mihome.post(POWEROFF, id=self._id))
+        return bool(self._mihome.post(POWEROFF, deviceid=self._id))
 
     # @property
     # def is_monitor(self):

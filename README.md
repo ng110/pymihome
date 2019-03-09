@@ -1,7 +1,7 @@
 pymihome
 ===============================
 
-version number: 0.0.6
+version number: 0.0.7
 
 author: Neil Griffin
 

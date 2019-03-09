@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 from codecs import open
 from os import path
 
-__version__ = '0.0.6'
+__version__ = '0.0.7'
 
 here = path.abspath(path.dirname(__file__))
 
@@ -40,6 +40,7 @@ setup(
     keywords='energenie mihome',
     packages=find_packages(exclude=['docs', 'tests*']),
     include_package_data=True,
+    python_requires='>3.5',
     install_requires=install_requires,
     dependency_links=dependency_links
 )
