@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 from codecs import open
 from os import path
 
-__version__ = '0.0.5'
+__version__ = '0.0.6'
 
 here = path.abspath(path.dirname(__file__))
 
@@ -28,7 +28,7 @@ setup(
     author_email='ngriffin110@gmail.com',
     url='https://github.com/ng110/pymihome',
     download_url='https://github.com/ng110/pymihome/tarball/' + __version__,
-    license='LGPLv3'
+    license='LGPLv3',
     classifiers=[
       "Development Status :: 2 - Pre-Alpha",
       "Topic :: Utilities",
