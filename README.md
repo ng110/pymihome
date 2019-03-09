@@ -34,7 +34,7 @@ Offers welcome, as I don't have much time to work on this!
 License
 -------
 
-Not decided yet.
+LGPLv3
 
 Example
 -------
